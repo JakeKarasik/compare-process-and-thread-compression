@@ -1,6 +1,6 @@
 #CC     =       cc
 CC      =       gcc
-FLAGS   =       -Wall -g
+FLAGS   =       -Wall -g -lpthread
 
 COMPILE =       $(CC) $(FLAGS)
 
