@@ -3,12 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
-	To do:
-	-Fix: not splitting properly, (possibly because of line 79)
-
-*/
-
 typedef struct file_data_ {
 	int start_pos;
 	int end_pos;
@@ -45,7 +39,7 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 	printf("Part %d start=%d end=%d\n",part_number, start, end);
 
 	int length_of_part_number = part_number < 0 ? 0 : length_of_int(part_number);
-	char * compress_name = malloc(strlen(file_name) + 1 + 5 + length_of_part_number); //filename + null term + part length
+	char * compress_name = malloc(strlen(file_name) + 1 + 5 + length_of_part_number); //filename + null term + "_LOLS" + part length
 	
 	int i = 0;
 	while(file_name[i] != '\0'){
