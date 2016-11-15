@@ -42,6 +42,8 @@ int length_of_int(int n) {
 
 void LOLS(int start, int end, int part_number, char * file_name) {
 
+	printf("Part %d start=%d end=%d\n",part_number, start, end);
+
 	int length_of_part_number = part_number < 0 ? 0 : length_of_int(part_number);
 	char * compress_name = malloc(strlen(file_name) + 1 + 5 + length_of_part_number); //filename + null term + part length
 	
@@ -71,33 +73,32 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 	char curr_char;
 	char compare_char;
 	int counter = start;
-	//char num_of_chars_string[6];
 	int num_of_chars = 1;
 	fseek(orig, start, SEEK_SET);
 	compare_char = fgetc(orig);
 
 	for (i = 0; counter <= end && compare_char != EOF; i++) {
-		
 		curr_char = fgetc(orig);
+		printf("i=%d, currchar = %c,compare_char = %c, part_num=%d\n",i, curr_char, compare_char,part_number);
 		if(curr_char == compare_char) {
 
 			num_of_chars++;
 
 		} else {
-			
 			switch(num_of_chars) {
 				case 1: 
 					fputc(compare_char, compress);
+					printf("saving %c in part %d\n",compare_char, part_number);
 					break;
 				case 2: 
 					fputc(compare_char, compress);
 					fputc(compare_char, compress);
+					printf("saving %c%c in part %d\n",compare_char,compare_char, part_number);
 					break;
 				default:
 					fprintf(compress, "%d", num_of_chars);
-					//sprintf(num_of_chars_string,"%d",num_of_chars);
-					//fputs(num_of_chars_string, compress);
 					fputc(compare_char, compress);
+					printf("saving %d%c in part %d\n",num_of_chars,compare_char, part_number);
 					break; 
 			}
 
@@ -107,6 +108,26 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 		}
 		counter++;
 	}
+	num_of_chars--;
+	if (curr_char != EOF && num_of_chars > 0) {
+		switch(num_of_chars) {
+			case 1: 
+				fputc(compare_char, compress);
+				printf("saving %c in part %d\n",compare_char, part_number);
+				break;
+			case 2: 
+				fputc(compare_char, compress);
+				fputc(compare_char, compress);
+				printf("saving %c%c in part %d\n",compare_char,compare_char, part_number);
+				break;
+			default:
+				fprintf(compress, "%d", num_of_chars);
+				fputc(compare_char, compress);
+				printf("saving %d%c in part %d\n",num_of_chars,compare_char, part_number);
+				break; 
+		}
+	}
+	
 	fclose(orig);
 	fclose(compress);
 	free(compress_name);
