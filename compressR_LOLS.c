@@ -74,7 +74,7 @@ void compressR_LOLS(char * file, int parts) {
 		}
 			
 		prev = end_pos + 1;
-		current = fork();
+		current = fork(); //Spawn new process
 		
 		//If the current process is not the parent, the it does the compression.
 		//The start, end, partion number and uncompressed file name for each compressed file is passed to the compressR_worker_LOLS executable.

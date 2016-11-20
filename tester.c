@@ -7,16 +7,16 @@
 
 int main(int argc, char ** argv){
 	
-	/*
+	
 	int choice = 0;
 	printf("Greetings! What would you like to do with this file?\n");
 	printf("1 -> Compress by processes\n");
 	printf("2 -> Compress by threads\n");
 	printf("0 -> Quit\n");
-	scanf("%d", &choice);*/
+	scanf("%d", &choice);
 	char * fileName = "./information.txt";//(char*)malloc(100);
 	int numParts;
-	/*switch(choice){
+	switch(choice){
 		
 		case 0 : break;
 		case 1 : 
@@ -35,7 +35,8 @@ int main(int argc, char ** argv){
 		        break;
 				  
 	}
-	*/
+	
+	/*
 	numParts = 5;
 
 	long time = 0;
@@ -54,7 +55,7 @@ int main(int argc, char ** argv){
 	gettimeofday(&finish2, NULL);
 	time += (long)(finish2.tv_sec - start2.tv_sec)*1000000L;
 	time += (long)(finish2.tv_usec - start2.tv_usec);
-	printf("Thread time = %ld microseconds\n",time);
+	printf("Thread time = %ld microseconds\n",time);*/
 	//free(fileName);
 	
 	return 0;	
