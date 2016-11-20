@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <unistd.h>
 
+//Returns number of digits in int 'n'
 int length_of_int(int n) {
     if (n < 10) { 
         return 1;
@@ -28,17 +29,31 @@ int length_of_int(int n) {
     }
 }
 
+/*
+LOLS compression algorithm.  It compresses a file given a start position, end position, part number
+and filename.  The part_number is the index of the compressed file being made.
+The algorithm goes through the indicated range and copies to the compressed file only 
+alphabetical characters.  All other symbols are ignored.  WARNING!  If a compressed 
+file of the original file already exists with the same part number,it will be removed.  
+*/
 void LOLS(int start, int end, int part_number, char * file_name) {
-
-    //printf("Part %d start=%d end=%d\n",part_number, start, end);
 
     int length_of_part_number = part_number < 0 ? 0 : length_of_int(part_number);
     char * compress_name = malloc(strlen(file_name) + 1 + 5 + length_of_part_number); //filename + null term + "_LOLS" + part length
     
+    //Changes last dot in filename to _ for compress_name
     int i = 0;
+    char * extension_dot = strrchr(file_name,'.');
+    int extension_dot_location;
+    if (extension_dot != NULL) {
+        extension_dot_location = extension_dot-file_name;
+    } else {
+        extension_dot_location = -1;
+    }
+    
     while(file_name[i] != '\0'){
         
-        if (file_name[i] == '.') {
+        if (extension_dot_location == i) {
             compress_name[i] = '_';
         } else {
             compress_name[i] = file_name[i];
@@ -46,17 +61,20 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 
         i++;
     }
-
+    
+    //Appends '_LOLS' to compress_name
     strcat(compress_name, "_LOLS");
+    //If more than 1 part, adds part number
     if (part_number >= 0) {
         char part_as_string[length_of_part_number];
         sprintf(part_as_string, "%d", part_number);
         strcat(compress_name, part_as_string);
     }
-    
-    FILE * orig, * compress;
+
+    FILE * orig, * compress; //Orig is the file to compress and compress is the current compressed file being made.
     orig = fopen(file_name, "r");
 
+    //If compressed file with same name exists, delete in preparation for new file.
     if(access(compress_name, F_OK) != -1) {
         printf("Notice: Compressed file with this name exists; deleting old file.\n");
         remove(compress_name);
@@ -64,44 +82,42 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 
     compress = fopen(compress_name, "w");
 
-    char curr_char;
-    char compare_char;
+    char curr_char; //Current character in file
+    char compare_char; //Char to compare current character to
     int counter = start;
-    int num_of_chars = 1;
-    fseek(orig, start, SEEK_SET);
+    int num_of_chars = 1; //Tracks number of matching chars
+    fseek(orig, start, SEEK_SET); //Move to the correct starting location in file
     compare_char = fgetc(orig);
 
+    //If file begins with non-alphabetic character, loop until end of section or alphabetic char is found
     while (compare_char != EOF && counter <= end && !isalpha(compare_char)) {
-        //printf("compare char: %c was invalid... \n",compare_char);
         compare_char = fgetc(orig);
         counter++;
     }
 
+    //Loops through section, saving compressed chars into new compressed file
     for (i = 0; counter <= end && compare_char != EOF; i++) {
         curr_char = fgetc(orig);
-        //printf("i=%d, currchar = %c,compare_char = %c, part_num=%d\n",i, curr_char, compare_char,part_number);
-        
+
         if(!isalpha(curr_char)){
-
+            //Ignores non-alphabetic characters
         } else if(curr_char == compare_char) {
-
+            //Keeps track of number of same chars
             num_of_chars++;
 
         } else {
+            //LOL compression algorithm
             switch(num_of_chars) {
                 case 1: 
                     fputc(compare_char, compress);
-                    //printf("saving %c in part %d\n",compare_char, part_number);
                     break;
                 case 2: 
                     fputc(compare_char, compress);
                     fputc(compare_char, compress);
-                    //printf("saving %c%c in part %d\n",compare_char,compare_char, part_number);
                     break;
                 default:
                     fprintf(compress, "%d", num_of_chars);
                     fputc(compare_char, compress);
-                    //printf("saving %d%c in part %d\n",num_of_chars,compare_char, part_number);
                     break; 
             }
 
@@ -112,24 +128,22 @@ void LOLS(int start, int end, int part_number, char * file_name) {
         counter++;
     }
     if (isalpha(curr_char)) {
+        //Decrements so is not to overcount after the initial loop finishes.
         num_of_chars--;
     }
-    
+    //If loop ended but still 1 char to check, this ensures it is compressed
     if (num_of_chars > 0) {
         switch(num_of_chars) {
             case 1: 
                 fputc(compare_char, compress);
-                //printf("saving %c in part %d\n",compare_char, part_number);
                 break;
             case 2: 
                 fputc(compare_char, compress);
                 fputc(compare_char, compress);
-                //printf("saving %c%c in part %d\n",compare_char,compare_char, part_number);
                 break;
             default:
                 fprintf(compress, "%d", num_of_chars);
                 fputc(compare_char, compress);
-                //printf("saving %d%c in part %d\n",num_of_chars,compare_char, part_number);
                 break; 
         }
     }

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "compress.h"
 
+//Worker function called by pthread create
 void * thread_worker(file_data * thread_data) {
 
 	LOLS(thread_data->start_pos, thread_data->end_pos,thread_data->part_number,thread_data->file_name);
@@ -44,6 +45,7 @@ void compressT_LOLS(char * file_name, int parts) {
 	int chars_per_thread = characters_in_file / parts;
 	int remainder = characters_in_file % parts;
 	int prev = 0;
+	pthread_t child_threadID[parts];
 
 	int i;
 	for (i=0;i<parts;i++) {
@@ -68,9 +70,14 @@ void compressT_LOLS(char * file_name, int parts) {
 		}
 		pthread_create(&thread_id, NULL, (void * (*)(void *))thread_worker, data);
 
-		pthread_detach(thread_id);
+		child_threadID[i] = thread_id;
 
 		prev = data->end_pos + 1;
 	}
-	pthread_exit(NULL);
+
+	i = 0;
+	while(i < parts) {
+		pthread_join(child_threadID[i], NULL);
+		i++;
+	}
 }
