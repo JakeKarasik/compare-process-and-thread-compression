@@ -1,28 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <unistd.h>
 
 int length_of_int(int n) {
     if (n < 10) { 
-    	return 1;
+        return 1;
     } else if (n < 100) {
-    	return 2;
+        return 2;
     } else if (n < 1000) {
-    	return 3;
+        return 3;
     } else if (n < 10000) {
-    	return 4;
+        return 4;
     } else if (n < 100000) {
-    	return 5;
+        return 5;
     } else if (n < 1000000) {
-    	return 6;
+        return 6;
     } else if (n < 10000000) {
-    	return 7;
+        return 7;
     } else if (n < 100000000) {
-    	return 8;
+        return 8;
     } else if (n < 1000000000) {
-    	return 9;
+        return 9;
     } else {
-    	return 19; //worst case 19 digits
+        return 19; //worst case 19 digits
     }
 }
 
@@ -54,6 +56,12 @@ void LOLS(int start, int end, int part_number, char * file_name) {
     
     FILE * orig, * compress;
     orig = fopen(file_name, "r");
+
+    if(access(compress_name, F_OK) != -1) {
+        printf("Notice: Compressed file with this name exists; deleting old file.\n");
+        remove(compress_name);
+    }
+
     compress = fopen(compress_name, "w");
 
     char curr_char;
@@ -63,10 +71,19 @@ void LOLS(int start, int end, int part_number, char * file_name) {
     fseek(orig, start, SEEK_SET);
     compare_char = fgetc(orig);
 
+    while (compare_char != EOF && counter <= end && !isalpha(compare_char)) {
+        printf("compare char: %c was invalid... \n",compare_char);
+        compare_char = fgetc(orig);
+        counter++;
+    }
+
     for (i = 0; counter <= end && compare_char != EOF; i++) {
         curr_char = fgetc(orig);
-        //printf("i=%d, currchar = %c,compare_char = %c, part_num=%d\n",i, curr_char, compare_char,part_number);
-        if(curr_char == compare_char) {
+        printf("i=%d, currchar = %c,compare_char = %c, part_num=%d\n",i, curr_char, compare_char,part_number);
+        
+        if(!isalpha(curr_char)){
+
+        } else if(curr_char == compare_char) {
 
             num_of_chars++;
 
@@ -94,8 +111,11 @@ void LOLS(int start, int end, int part_number, char * file_name) {
         }
         counter++;
     }
-    num_of_chars--;
-    if (curr_char != EOF && num_of_chars > 0) {
+    if (isalpha(curr_char)) {
+        num_of_chars--;
+    }
+    
+    if (num_of_chars > 0) {
         switch(num_of_chars) {
             case 1: 
                 fputc(compare_char, compress);

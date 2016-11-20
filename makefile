@@ -10,10 +10,10 @@ compressT_LOLS: compressT_LOLS.c functions.c compress.h
 
 compressR_LOLS: compressR_LOLS.c compressR_worker_LOLS.c functions.c compress.h
 	$(COMPILE) -c functions.c compressR_LOLS.c
-	$(COMPILE) functions.c compressR_worker_LOLS.c -o Worker 
+	$(COMPILE) functions.c compressR_worker_LOLS.c -o compressR_worker_LOLS 
 
 tester: tester.c functions.o compressT_LOLS.o compress.h
 	$(COMPILE) -pthread tester.c functions.o compressT_LOLS.o compressR_LOLS.o -o tester
 	
 clean:
-	rm -rf *.o compressR_LOLS compressT_LOLS Worker functions tester
+	rm -rf *.o compressR_worker_LOLS tester

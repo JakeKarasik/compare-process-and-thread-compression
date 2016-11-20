@@ -10,28 +10,28 @@ int main(int argc, char ** argv){
 	printf("2 -> Compress by threads\n");
 	printf("0 -> Quit\n");
 	scanf("%d", &choice);
-	char * fileName = (char*)malloc(100);
+	char * fileName = "information.txt";//(char*)malloc(100);
 	int numParts;
 	switch(choice){
 		
 		case 0 : break;
 		case 1 : 
-				printf("Please enter the filename of the file you want compressed--\n");
-				scanf("%s", fileName);
+				//printf("Please enter the filename of the file you want compressed--\n");
+				//scanf("%s", fileName);
 				printf("How many parts do you want it compressed into?--\n"); 
 				scanf("%d", &numParts);
 				compressR_LOLS(fileName, numParts);
 				break;
 		case 2 : //compressT
-				printf("Please enter the filename of the file you want compressed--\n");
-				scanf("%s", fileName);
+				//printf("Please enter the filename of the file you want compressed--\n");
+				//scanf("%s", fileName);
 				printf("How many parts do you want it compressed into?--\n"); 
 				scanf("%d", &numParts);
 				compressT_LOLS(fileName, numParts);
 		        break;
 				  
 	}
-	free(fileName);
+	//free(fileName);
 	//printf("Thank you for playing!\n");
 	return 0;
 		

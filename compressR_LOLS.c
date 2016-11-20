@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <ctype.h>
+#include <wait.h>
 #include "compress.h"
 
 void compressR_LOLS(char * file, int parts) {
@@ -22,7 +22,7 @@ void compressR_LOLS(char * file, int parts) {
 	orig = fopen(file, "r");
 
 	if (orig == NULL) {
-		fprintf(stderr,"Error: Invalid file.\n");
+		fprintf(stderr,"Error: Unable to access file.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -31,6 +31,8 @@ void compressR_LOLS(char * file, int parts) {
 	int segment_partition = characters_in_file / parts;
 	int remainder = characters_in_file % parts;
 	fclose(orig);
+
+	printf("%d chars in file.\n",characters_in_file);
 
 	if (parts > characters_in_file) {
 		fprintf(stderr,"Error: There are more parts than there are characters in the file.\n");
@@ -72,8 +74,8 @@ void compressR_LOLS(char * file, int parts) {
 			sprintf(start_pos_buff, "%d", start_pos);
 			sprintf(end_pos_buff, "%d", end_pos);
 
-			char * args[] = {"./Worker",start_pos_buff,end_pos_buff,part_num_buff,file, NULL};
-			execvp("./Worker", args);			
+			char * args[] = {"./compressR_worker_LOLS",start_pos_buff,end_pos_buff,part_num_buff,file, NULL};
+			execvp("./compressR_worker_LOLS", args);			
 			
 		}
 		

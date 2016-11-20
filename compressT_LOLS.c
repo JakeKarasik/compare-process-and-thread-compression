@@ -28,7 +28,7 @@ void compressT_LOLS(char * file_name, int parts) {
 	FILE * file = fopen(file_name, "r");
 
 	if (file == NULL) {
-		fprintf(stderr,"Error: Invalid file.\n");
+		fprintf(stderr,"Error: Unable to access file.\n");
 		exit(EXIT_FAILURE);
 	}
 
