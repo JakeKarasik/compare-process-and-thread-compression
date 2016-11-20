@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include "compress.h"
+#include <unistd.h>
+#include <string.h>
 
 int main(int argc, char ** argv){
 	
@@ -31,6 +34,41 @@ int main(int argc, char ** argv){
 		        break;
 				  
 	}
+	/*
+	numParts = 5;
+
+	long time = 0;
+	struct timeval start, finish;
+	gettimeofday(&start, NULL);
+
+		compressR_LOLS(fileName, numParts);
+
+	gettimeofday(&finish, NULL);
+
+	time += (long)(finish.tv_sec - start.tv_sec)*1000000L;
+	time += (long)(finish.tv_usec - start.tv_usec);
+	printf("Process time = %ld \n",time);
+
+	int i=0;
+	char * str = "information_txt_LOLS";
+	for (;i<numParts;i++) {
+		char buff[100];
+		strcat(buff,str);
+		sprintf(buff, "%d", i);
+		if(access(buff, F_OK) != -1) {
+	        remove(buff);
+	        printf("removing file....%S",buff);
+   	 	}
+	}
+	
+
+	time = 0;
+	gettimeofday(&start, NULL);
+
+		compressT_LOLS(fileName, numParts);
+
+	gettimeofday(&finish, NULL);
+	printf("Thread time = %ld \n",time);*/
 	//free(fileName);
 	//printf("Thank you for playing!\n");
 	return 0;

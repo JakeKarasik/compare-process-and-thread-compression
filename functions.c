@@ -72,14 +72,14 @@ void LOLS(int start, int end, int part_number, char * file_name) {
     compare_char = fgetc(orig);
 
     while (compare_char != EOF && counter <= end && !isalpha(compare_char)) {
-        printf("compare char: %c was invalid... \n",compare_char);
+        //printf("compare char: %c was invalid... \n",compare_char);
         compare_char = fgetc(orig);
         counter++;
     }
 
     for (i = 0; counter <= end && compare_char != EOF; i++) {
         curr_char = fgetc(orig);
-        printf("i=%d, currchar = %c,compare_char = %c, part_num=%d\n",i, curr_char, compare_char,part_number);
+        //printf("i=%d, currchar = %c,compare_char = %c, part_num=%d\n",i, curr_char, compare_char,part_number);
         
         if(!isalpha(curr_char)){
 
