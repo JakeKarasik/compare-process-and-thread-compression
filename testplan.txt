@@ -1,0 +1,86 @@
+Test Cases:
+
+1. Empty File.
+
+2. Invalid file names/file doesn't exist.
+
+3. Files in different directories.
+
+4. File of all invalid characters.
+	ex. ".,//.,": x parts -> x number of empty compressed files.
+
+5. File of valid characters followed by invalid ones.
+	ex. "abd,/.": 
+	1 part -> "abd"
+	2 parts -> "abd" empty
+	3 parts -> "ab" "d" empty
+	4 parts -> "abd" empty empty empty
+	5 parts -> "ab" "d" empty empty empty
+	6 parts -> "a" "b" "d" empty empty empty
+	7 parts -> error
+
+6. File of 1 valid character followed by only invalid ones.
+	ex. "a/.,":
+	1 part -> "a"
+	2 parts -> "a" empty
+	3 parts -> "a" empty empty
+	4 parts -> "a" empty empty empty
+	5 parts -> error
+
+7. File beginning with valid character. 
+	ex. "adfa": 
+	1 part -> "adfa"
+	2 parts -> "ad" "fa"
+	3 parts -> "ad" "f" "a"
+
+8. File beginning with invalid character. 
+	ex. "/adf": 1 part -> "adf"
+	2 parts -> "a" "df"
+	3 parts -> "a" "d" "f", 
+	4 parts -> empty "a" "d" "f"
+	5 parts -> error
+
+9. File with alternating valid and invalid characters. 
+	ex. "a.f/f.a<": 
+	1 part -> "affa" 
+	2 parts -> "af" "fa" 
+	3 parts -> "af" "f" "a"
+	4 parts -> "a" "f" "f" "a"
+	5 parts -> "af" "f" empty "a" empty 
+	6 parts -> "af" empty "f" empty "a"
+	7 parts -> "a" empty "f" empty "f" empty "a" empty 
+	8 parts "a" empty "f" empty  "f" empty "a" empty 
+	9 parts -> error
+
+10. Split between multiplicity of 2. 
+	ex. "oo": 
+	1 part -> "oo" 
+	2 parts -> "o" "o" 
+	3 parts -> error
+
+11. Split between multiplicity of odd coefficients. 
+	ex. "ooooo": 
+	1 part -> "5o" 
+	2 parts -> "ooo" "oo" 
+	3 parts -> "ooo" "o" "o"
+	4 parts -> "oo" "o" "o" "o"
+	5 parts -> "o" "o" "o" "o" "o"
+	6 parts -> error
+
+12. Split between multiplicity of even coefficients. 
+	ex. "oooo": 
+	1 part -> "4o" 
+	2 parts -> "oo" "oo" 
+	3 parts -> "oo" "o" "o" 
+	4 parts -> "o" "o" "o" "o" 
+	5 parts -> error
+
+13. File of all alphabetical characters:
+	13a. Test case from spec: jjjjjjjjoooaaaaanrr
+		1 part -> "8j3o5anrr"
+		2 parts -> "8joo" "o5anrr"
+		3 parts -> "7j" "j3oaa" "3anrr"
+	13b. Test case from spec: hhhhhhhiiiiii
+		1 part -> "7h6i"
+		2 parts -> "7h" "6i"
+		3 parts -> "5h" "hhii" "4i"
