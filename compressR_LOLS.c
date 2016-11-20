@@ -32,8 +32,6 @@ void compressR_LOLS(char * file, int parts) {
 	int remainder = characters_in_file % parts;
 	fclose(orig);
 
-	printf("%d chars in file.\n",characters_in_file);
-
 	if (parts > characters_in_file) {
 		fprintf(stderr,"Error: There are more parts than there are characters in the file.\n");
 		exit(EXIT_FAILURE);
