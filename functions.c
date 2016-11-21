@@ -40,7 +40,7 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 
     int length_of_part_number = part_number < 0 ? 0 : length_of_int(part_number);
     char * compress_name = malloc(strlen(file_name) + 1 + 5 + length_of_part_number); //filename + null term + "_LOLS" + part length
-    
+    memset(compress_name, 0, strlen(file_name) + 1 + 5 + length_of_part_number);
     //Changes last dot in filename to _ for compress_name
     int i = 0;
     char * extension_dot = strrchr(file_name,'.');
@@ -61,12 +61,13 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 
         i++;
     }
+    compress_name[i] = '\0';
     
     //Appends '_LOLS' to compress_name
     strcat(compress_name, "_LOLS");
     //If more than 1 part, adds part number
     if (part_number >= 0) {
-        char part_as_string[length_of_part_number];
+        char part_as_string[length_of_part_number+1];
         sprintf(part_as_string, "%d", part_number);
         strcat(compress_name, part_as_string);
     }
@@ -76,11 +77,12 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 
     //If compressed file with same name exists, delete in preparation for new file.
     if(access(compress_name, F_OK) != -1) {
-        printf("Notice: Compressed file with this name exists; deleting old file.\n");
+        //printf("Notice: Compressed file with this name exists; deleting old file.\n");
         remove(compress_name);
     }
 
     compress = fopen(compress_name, "w");
+    free(compress_name);
 
     char curr_char; //Current character in file
     char compare_char; //Char to compare current character to
@@ -150,5 +152,5 @@ void LOLS(int start, int end, int part_number, char * file_name) {
     
     fclose(orig);
     fclose(compress);
-    free(compress_name);
+
 }

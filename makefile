@@ -16,4 +16,4 @@ tester: tester.c functions.o compressT_LOLS.o compress.h
 	$(COMPILE) -pthread tester.c functions.o compressT_LOLS.o compressR_LOLS.o -o tester
 	
 clean:
-	rm -rf *.o compressR_worker_LOLS tester
+	rm -rf *.o compressR_worker_LOLS tester timetest
