@@ -81,7 +81,7 @@ void LOLS(int start, int end, int part_number, char * file_name) {
         remove(compress_name);
     }
 
-    compress = fopen(compress_name, "w");
+    compress = fopen(compress_name, "w+");
     free(compress_name);
 
     char curr_char; //Current character in file
@@ -93,6 +93,10 @@ void LOLS(int start, int end, int part_number, char * file_name) {
 
     //If file begins with non-alphabetic character, loop until end of section or alphabetic char is found
     while (compare_char != EOF && counter <= end && !isalpha(compare_char)) {
+        if (counter == end) {
+            counter++;
+            break;
+        }
         compare_char = fgetc(orig);
         counter++;
     }
@@ -134,7 +138,7 @@ void LOLS(int start, int end, int part_number, char * file_name) {
         num_of_chars--;
     }
     //If loop ended but still 1 char to check, this ensures it is compressed
-    if (num_of_chars > 0) {
+    if (isalpha(compare_char) && num_of_chars > 0) {
         switch(num_of_chars) {
             case 1: 
                 fputc(compare_char, compress);

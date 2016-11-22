@@ -32,9 +32,12 @@ Test Cases:
 	1 part -> "adfa"
 	2 parts -> "ad" "fa"
 	3 parts -> "ad" "f" "a"
+	4 parts -> "a" "d" "f" "a"
+	5 parts -> error
 
 8. File beginning with invalid character. 
-	ex. "/adf": 1 part -> "adf"
+	ex. "/adf": 
+	1 part -> "adf"
 	2 parts -> "a" "df"
 	3 parts -> "a" "d" "f", 
 	4 parts -> empty "a" "d" "f"
@@ -48,8 +51,8 @@ Test Cases:
 	4 parts -> "a" "f" "f" "a"
 	5 parts -> "af" "f" empty "a" empty 
 	6 parts -> "af" empty "f" empty "a"
-	7 parts -> "a" empty "f" empty "f" empty "a" empty 
-	8 parts "a" empty "f" empty  "f" empty "a" empty 
+	7 parts -> "a" "f" empty "f" empty "a" empty
+	8 parts -> "a" empty "f" empty "f" empty "a" empty 
 	9 parts -> error
 
 10. Split between multiplicity of 2. 
@@ -61,8 +64,8 @@ Test Cases:
 11. Split between multiplicity of odd coefficients. 
 	ex. "ooooo": 
 	1 part -> "5o" 
-	2 parts -> "ooo" "oo" 
-	3 parts -> "ooo" "o" "o"
+	2 parts -> "3o" "oo" 
+	3 parts -> "3o" "o" "o"
 	4 parts -> "oo" "o" "o" "o"
 	5 parts -> "o" "o" "o" "o" "o"
 	6 parts -> error
